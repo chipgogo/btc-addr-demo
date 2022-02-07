@@ -54,7 +54,7 @@ export default function Mnemonic() {
           </Text>
           <TextArea
             onBlur={(e) => handleMnemonic(e.target.value)}
-            value={mnemonic}
+            defaultValue={mnemonic}
             placeholder={`Click Generate for your Mnemonic`}
             margin="0"
           />
@@ -85,7 +85,7 @@ export default function Mnemonic() {
             <Text fontSize="11px" color="#828a92">
               Mnemonic Seed
             </Text>
-            <TextArea value={seed} defaultValue={`Mnemonic seed`} margin="0 0 1rem 0" />
+            <TextArea value={seed} readOnly margin="0 0 1rem 0" />
           </>
         )}
       </Wrapper>
