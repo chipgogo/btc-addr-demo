@@ -1,6 +1,4 @@
 import styled from 'styled-components'
-import { Wrapper } from 'components/Wrapper'
-import { Text } from 'components/Text'
 
 const InputBase = styled.input<{
   fontSize?: string
