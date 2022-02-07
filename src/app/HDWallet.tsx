@@ -30,7 +30,7 @@ interface PathInfo {
 }
 
 /**
- * Component for generating Bitcoin HD Segwit Addresses
+ * HD Wallet Section. Generate Bitcoin HD Segwit Addresses.
  * Can manually enter a path and add additional wallets
  */
 export default function HDWallet() {
