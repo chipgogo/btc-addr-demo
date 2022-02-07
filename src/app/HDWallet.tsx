@@ -47,7 +47,9 @@ export default function HDWallet() {
   const _getAddresses = () => {
     const result = getAddresses(seed, pathInfo.path, extra)
     if (!result) {
-      setErrMsg(`Invalid Path: Must be a valid Nested SegWit (m/49'/0'/0'/0/0) or Native SegWit (m/84'/0'/0'/0/0) address`)
+      setErrMsg(
+        `Invalid Path: Must be a valid Nested SegWit (m/49'/0'/0'/0/0) or Native SegWit (m/84'/0'/0'/0/0) address`
+      )
     } else {
       setAddresses(result)
       setErrMsg(undefined)
@@ -67,8 +69,6 @@ export default function HDWallet() {
     })
     setExtra(0)
   }
-
-  console.log(pathInfo)
 
   return (
     <Section>
