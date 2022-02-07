@@ -23,6 +23,12 @@ Run tests
 yarn test
 ```
 
+Create production build and serve it
+```
+yarn build
+yarn start:prod
+```
+
 ## Main libraries used
 [bitcoinjs](https://github.com/bitcoinjs/bitcoinjs-lib) - Utility functions for generating mnemonics and addresses
 
