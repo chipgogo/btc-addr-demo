@@ -25,4 +25,5 @@ yarn test
 
 ## Main libraries used
 [bitcoinjs](https://github.com/bitcoinjs/bitcoinjs-lib) - Utility functions for generating mnemonics and addresses
+
 [styled-components](https://github.com/styled-components/styled-components) - Styling and theming
