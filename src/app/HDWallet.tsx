@@ -17,40 +17,58 @@ const TabItem = styled.div<{ active?: boolean }>`
   background: ${({ theme, active }) => (active ? `${theme.colors.secondary1}` : '#fff')};
   padding: 0.5rem;
   border: ${({ theme }) => `1px solid ${theme.colors.secondary1}`};
-  cursor: pointer;  
+  cursor: pointer;
 `
+
+type PathType = 'select' | 'write'
+type SegWitType = 'P2SH' | 'Native'
+
+interface PathInfo {
+  pathType: PathType
+  segWitType?: SegWitType
+  path?: string
+}
 
 /**
  * Component for generating Bitcoin HD Segwit Addresses
  * Can manually enter a path and add additional wallets
  */
 export default function HDWallet() {
-  const [segwitType, setSegwitType] = useState<'P2SH' | 'Native'>('P2SH')
+  const [pathInfo, setPathInfo] = useState<PathInfo>({
+    pathType: 'select',
+    segWitType: 'P2SH',
+    path: `m/49'/0'/0'/0/0`,
+  })
   const [extra, setExtra] = useState<number>(0)
-  const [path, setPath] = useState<string>()
-  // state for if user wants to enter path manually
-  const [pathType, setPathType] = useState<'select' | 'write'>('select')
   const [addresses, setAddresses] = useState<string[][]>()
   const [seed, setSeed] = useState<string>()
+  const [errMsg, setErrMsg] = useState<string>()
 
   const _getAddresses = () => {
-    let result: string[][] | undefined
-    if (pathType === 'select') {
-      if (segwitType === 'P2SH') {
-        result = getAddresses(seed, `m/49'/0'/0'/0/0`, extra)
-      } else {
-        result = getAddresses(seed, `m/84'/0'/0'/0/0`, extra)
-      }
+    const result = getAddresses(seed, pathInfo.path, extra)
+    if (!result) {
+      setErrMsg(`Invalid Path: Must be a valid Nested SegWit (m/49'/0'/0'/0/0) or Native SegWit (m/84'/0'/0'/0/0) address`)
     } else {
-      result = getAddresses(seed, path, extra)
+      setAddresses(result)
+      setErrMsg(undefined)
     }
-    setAddresses(result)
   }
 
-  const handleHDClick = () => {
+  const onGenClick = () => {
     _getAddresses()
     setExtra((prev) => prev + 1)
   }
+
+  const onPathChange = (pathType: PathType, segWitType?: SegWitType, inputPath?: string) => {
+    setPathInfo({
+      pathType,
+      segWitType: segWitType && segWitType,
+      path: inputPath ? inputPath : segWitType === 'P2SH' ? `m/49'/0'/0'/0/0` : `m/84'/0'/0'/0/0`,
+    })
+    setExtra(0)
+  }
+
+  console.log(pathInfo)
 
   return (
     <Section>
@@ -70,8 +88,8 @@ export default function HDWallet() {
               type="radio"
               value="select"
               name="path"
-              checked={pathType === 'select'}
-              onChange={() => setPathType('select')}
+              checked={pathInfo.pathType === 'select'}
+              onChange={() => onPathChange('select', pathInfo.segWitType)}
             />
             <Text padding="0 0 0 0.25rem">Address Type</Text>
           </InlineWrapper>
@@ -80,48 +98,70 @@ export default function HDWallet() {
               type="radio"
               value="write"
               name="path"
-              checked={pathType === 'write'}
-              onChange={() => setPathType('write')}
+              checked={pathInfo.pathType === 'write'}
+              onChange={() => onPathChange('write', pathInfo.segWitType, pathInfo.path)}
             />
             <Text padding="0 0 0 0.25rem">Specify Path</Text>
           </InlineWrapper>
         </InlineWrapper>
         <InlineWrapper justifyContent="space-between" padding="0 0 1rem 0">
-          {pathType === 'select' && (
+          {pathInfo.pathType === 'select' && (
             <TabContainer>
-              <TabItem onClick={() => setSegwitType('P2SH')} active={segwitType === 'P2SH'}>
-                <Text fontWeight="500" color={segwitType === 'P2SH' ? '#FFF' : '#262A41'}>
-                  SegWit (P2SH)
+              <TabItem onClick={() => onPathChange('select', 'P2SH')} active={pathInfo?.segWitType === 'P2SH'}>
+                <Text fontWeight="500" color={pathInfo?.segWitType === 'P2SH' ? '#FFF' : '#262A41'}>
+                  Nested SegWit (P2SH)
                 </Text>
               </TabItem>
-              <TabItem onClick={() => setSegwitType('Native')} active={segwitType === 'Native'}>
-                <Text fontWeight="500" color={segwitType === 'Native' ? '#FFF' : '#262A41'}>
+              <TabItem onClick={() => onPathChange('select', 'Native')} active={pathInfo?.segWitType === 'Native'}>
+                <Text fontWeight="500" color={pathInfo?.segWitType === 'Native' ? '#FFF' : '#262A41'}>
                   Native SegWit (bech32)
                 </Text>
               </TabItem>
             </TabContainer>
           )}
-          {pathType === 'write' && (
-            <LinedInput placeholder="m/49'/0'/0'/0/0" textAlign="right" onChange={(e) => setPath(e.target.value)} />
+          {pathInfo.pathType === 'write' && (
+            <div>
+              <Text fontSize="11px" color="#828a92">
+                Derivation Path
+              </Text>
+              <LinedInput
+                defaultValue={pathInfo.path}
+                textAlign="left"
+                onChange={(e) => onPathChange('write', pathInfo.segWitType, e.target.value)}
+              />
+            </div>
           )}
-          <ButtonPrimary padding="0.5rem 2rem" onClick={handleHDClick}>
+          <ButtonPrimary padding="0.5rem 2rem" onClick={onGenClick}>
             +
           </ButtonPrimary>
         </InlineWrapper>
-        {addresses?.length !== 0 && <Divider borderColor="#ccc" margin="0 0 0.5rem 0" />}
-        {addresses?.map(([thisPath, thisAddress, key]) => (
-          <InlineWrapper justifyContent="space-between" padding="0 0 0.5rem 0">
-            <Text>{thisPath}</Text>
-            <InlineWrapper margin="0">
-              <Text padding="0 1rem 0 0">{thisAddress}</Text>
-              <Copy toCopy={key}>
-                <InlineWrapper background="#262A41" margin="0" padding="0.25rem" borderRadius="6px" alignItems="center">
-                  <Key size="16" color="#FFF" />
+        {errMsg ? (
+          <Text color="#F82D3A">{errMsg}</Text>
+        ) : (
+          <>
+            <Divider borderColor="#ccc" margin="0 0 0.5rem 0" />
+            {addresses &&
+              addresses.map(([thisPath, thisAddress, key], i) => (
+                <InlineWrapper key={i} justifyContent="space-between" padding="0 0 0.5rem 0">
+                  <Text>{thisPath}</Text>
+                  <InlineWrapper margin="0">
+                    <Text padding="0 1rem 0 0">{thisAddress}</Text>
+                    <Copy toCopy={key}>
+                      <InlineWrapper
+                        background="#262A41"
+                        margin="0"
+                        padding="0.25rem"
+                        borderRadius="6px"
+                        alignItems="center"
+                      >
+                        <Key size="16" color="#FFF" />
+                      </InlineWrapper>
+                    </Copy>
+                  </InlineWrapper>
                 </InlineWrapper>
-              </Copy>
-            </InlineWrapper>
-          </InlineWrapper>
-        ))}
+              ))}
+          </>
+        )}
       </Wrapper>
     </Section>
   )
