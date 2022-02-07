@@ -5,7 +5,7 @@ import * as bitcoin from 'bitcoinjs-lib'
  * @param {number} m required signatures
  * @param {number} n total signatures
  * @param {string[]} pubKeys public keys in strings
- * @returns {string} address
+ * @returns {string | undefined} address
  */
 export default function getMultiSigAddress(m: number, n: number, pubKeys: string[]): string | undefined {
   try {

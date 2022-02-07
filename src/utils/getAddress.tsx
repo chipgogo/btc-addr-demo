@@ -5,7 +5,7 @@ import * as bitcoin from 'bitcoinjs-lib'
  * Get a bIP49 or BIP84 address and public key
  * @param {string} seed mnemonic seed
  * @param {string} path a valid BIP49 or BIP84 derivation path
- * @returns {string[]} [address, publicKey]
+ * @returns {string[] | undefined} [address, publicKey] or undefined if purpose is not valid
  */
 export function getAddrAndPubKey(seed: string, path: string): [string, string] | undefined {
   var seedBuffer = Buffer.from(seed, 'hex');
@@ -36,7 +36,7 @@ export function getAddrAndPubKey(seed: string, path: string): [string, string] |
  * @param {string} seed mnemonic seed
  * @param {string} path a valid BIP49 or BIP84 derivation path
  * @param {string} extra a number of extra results to derive from the index in path
- * @returns {string[]} [path, address, publicKey]
+ * @returns {string[] | undefined} [path, address, publicKey] or undefined
  */
 export default function getAddresses(seed?: string, path?: string, extra: number = 0): string[][] | undefined {
   if (!seed || !path || path.length < 15) return
