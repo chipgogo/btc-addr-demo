@@ -3,7 +3,7 @@ import * as bip39 from 'bip39'
 /**
  * Get entropy in bytes
  * @param {number} numWords number of words in seed phrase
- * @returns {number}
+ * @returns {number} number of bytes
  */
 export function getEntropy(numWords: number): number {
   // 3 words = 32 bytes
