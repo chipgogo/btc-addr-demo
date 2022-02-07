@@ -41,8 +41,9 @@ export default function Mnemonic() {
     <Section>
       <Header2>Mnemonic</Header2>
       <Wrapper background="#f8f8f8">
-        <Header4 margin="0 0 1rem 0">Generate Mnemonic</Header4>
-        <InlineWrapper justifyContent="space-between">
+        <Header4 margin="0 0 0 0">Generate Mnemonic</Header4>
+        <Text>Select number of words in mnemonic and get mnemonic. You can optionally enter a password after to create a seed.</Text>
+        <InlineWrapper margin="1rem 0 0 0" justifyContent="space-between">
           <Dropdown items={['12 words', '15 words', '18 words', '21 words', '24 words']} callback={(selected) => onDropdownSelect(selected)} />
           <ButtonPrimary onClick={() => onGetMnemonic(entropy)} padding="0.5rem 2rem">
             Get Mnemonic

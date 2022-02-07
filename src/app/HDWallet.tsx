@@ -76,7 +76,7 @@ export default function HDWallet() {
       <Wrapper background="#f8f8f8">
         <Header4>Derivation</Header4>
         <Text padding="0 0 1rem 0">
-          Enter a mnemonic seed and path by either selecting an address type or manual path input
+          Enter a mnemonic seed and path by either selecting an address type or manual path input. You can use the seed from the previous section.
         </Text>
         <Text fontSize="11px" color="#828a92">
           Mnemonic seed
