@@ -9,12 +9,12 @@ import * as bitcoin from 'bitcoinjs-lib'
  */
 export default function getMultiSigAddress(m: number, n: number, pubKeys: string[]): string | undefined {
   try {
+    // Filter out empty strings from blank input fields
     const pubKeyBuffers: Buffer[] = pubKeys
       .filter((pubKey) => pubKey.length > 0)
       .map((pubKey) => Buffer.from(pubKey, 'hex'))
-    if (pubKeyBuffers.length !== pubKeys.length) return undefined
     const address = bitcoin.payments.p2sh({
-      redeem: bitcoin.payments.p2ms({ m, pubkeys: pubKeyBuffers }),
+      redeem: bitcoin.payments.p2ms({ m, n, pubkeys: pubKeyBuffers }),
     }).address
     return address
   } catch (e) {

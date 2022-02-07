@@ -1,12 +1,11 @@
 import getAddress, { getAddrAndPubKey } from './getAddress'
 
-const address =
-  'c2b9c7a73871234a5dc39689ee33e7ef30621a41e39b8524c25f1b3e49c2e8c64099833602c2dcd4af253c60c7ac46be87861612ea7cc5b4c7c38062407b6721'
-
-const bip49Path = `m/49'/0'/0'/0/0`
-const bip84Path = `m/84'/0'/0'/0/0`
-
 describe('getAddrAndPubKey utility function', () => {
+  const address =
+    'c2b9c7a73871234a5dc39689ee33e7ef30621a41e39b8524c25f1b3e49c2e8c64099833602c2dcd4af253c60c7ac46be87861612ea7cc5b4c7c38062407b6721'
+  const bip49Path = `m/49'/0'/0'/0/0`
+  const bip84Path = `m/84'/0'/0'/0/0`
+
   it('With BIP49 path and seed, correct address is returned', () => {
     expect(getAddrAndPubKey(address, bip49Path)).toStrictEqual([
       `342163NEPv3qBprREGD9Pg2BjonFPEHy7W`,
@@ -23,6 +22,9 @@ describe('getAddrAndPubKey utility function', () => {
 })
 
 describe('getAddress utility function', () => {
+  const address =
+    'c2b9c7a73871234a5dc39689ee33e7ef30621a41e39b8524c25f1b3e49c2e8c64099833602c2dcd4af253c60c7ac46be87861612ea7cc5b4c7c38062407b6721'
+  const bip49Path = `m/49'/0'/0'/0/0`
   it('should return [path, address, publicKey]', () => {
     expect(getAddress(address, bip49Path, 0)).toStrictEqual([
       [
