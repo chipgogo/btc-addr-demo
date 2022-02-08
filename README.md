@@ -3,6 +3,9 @@
 Demonstration of Bitcoin Mnemonics, SegWit HD addresses and Multi-sig addresses.
 Designed UX so that users can use outputs of each section for the next section. 
 
+## Demo
+You can play around with the demo at https://chipgogo.github.io/btc-addr-demo/
+
 ## Getting started
 
 Install dependencies
