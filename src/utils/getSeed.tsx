@@ -1,18 +1,18 @@
 import * as bip39 from 'bip39'
 
 /**
- * Get entropy in bytes
+ * Get entropy in bits
  * @param {number} numWords number of words in seed phrase
- * @returns {number} number of bytes
+ * @returns {number} number of bits
  */
 export function getEntropy(numWords: number): number {
-  // 3 words = 32 bytes
+  // 3 words = 32 bits
   return (numWords / 3) * 32
 }
 
 /**
- * Get a mnemonic phrase given bytes of entropy
- * @param {number} entropy bytes of entropy
+ * Get a mnemonic phrase given bits of entropy
+ * @param {number} entropy bits of entropy
  * @returns {string} mnemonic phrase
  */
 export function getMnemonic(entropy: number): string {
